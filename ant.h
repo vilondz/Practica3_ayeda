@@ -20,6 +20,7 @@ class Ant{
     void move();
     void girar_derecha();
     void girar_izquierda();
+    virtual std::string get_color() = 0;
     orientacion get_orientacion(void);
     char get_orientacion_char(void);
     void set_orientacion(orientacion);

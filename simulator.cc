@@ -3,12 +3,10 @@
 #include <cstdlib>
 #include <stdlib.h>
 #include <sstream>
-#include "ant_DDII.h"
-#include "ant_DIDI.h"
-#include "ant_IDDI.h"
-#include "ant_IDID.h"
-Simulator::Simulator(){
- menu();
+#include "ant_Cx.h"
+#include "ant_Hx.h"
+Simulator::Simulator(std::string& fichero){
+ menu(fichero);
 }
 
 void Simulator::Simulacion_por_fichero(std::vector<std::unique_ptr<Ant>>& hormigas, Tape& cinta){
@@ -58,7 +56,6 @@ void Simulator::Simulacion_por_fichero(std::vector<std::unique_ptr<Ant>>& hormig
             // Llamamos al método virtual que aplica el movimiento de la hormiga
             h->movimiento(color_actual);
             //std::cout << h->get_pos().first << " " << h->get_pos().second << std::endl;
-            h->move();
             //std::cout << h->get_pos().first << " " << h->get_pos().second << std::endl;
         }
         //cinta.draw_tape(std::cout);
@@ -112,14 +109,9 @@ void Simulator::Guardar_fichero(Tape & cinta, const std::vector<std::unique_ptr<
 
 }
 
-void Simulator::menu(){
+void Simulator::menu(std::string& fichero){
   std::cout << "Configuracion del simulador " << std::endl;
     int opcion = 0;
-    std::string fichero;
-
-    std::cout << "Introduzca un fichero .langdon" << std::endl;
-    std::cin >> fichero;
-
     do {
         opcion = 0;
         std::cout << "Como quiere imprimir la hormiga de langdon\n"
@@ -268,69 +260,74 @@ void Simulator::crear_archivo_guardado(std::string fichero_guardado, Tape& cinta
         }
     }
 }
+
 void Simulator::check_fichero(std::string fichero){
   std::vector<std::unique_ptr<Ant>> hormigas;
   std::cout << "Estoy leyendo el fichero" << std::endl;
-    std::ifstream input_file(fichero);
-    if (!input_file.is_open()) {
-        std::cerr << "Error al abrir el fichero terminando programa ..." << std::endl;
-        std::exit(1);
-    }
-
-    // --- Leemos dimensiones de la cinta y número de colores ---
-    int cinta_x, cinta_y, n_colores;
-    input_file >> cinta_x >> cinta_y >> n_colores;
+    //std::ifstream input_file(fichero);
+    //if (!input_file.is_open()) {
+    //    std::cerr << "Error al abrir el fichero terminando programa ..." << std::endl;
+    //    std::exit(1);
+    //}
+//
+    //// --- Leemos dimensiones de la cinta y número de colores ---
+    //int cinta_x, cinta_y, n_colores;
+    //input_file >> cinta_x >> cinta_y >> n_colores;
 
     // Inicializamos la cinta vacía
     
-    Tape cinta(cinta_x, cinta_y, n_colores);
+    Tape cinta(20, 40, 4);
 
-    // --- Leemos las hormigas ---
-    input_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::string linea_hormigas;
-    std::getline(input_file, linea_hormigas);
-    std::stringstream ss(linea_hormigas);
-   
-    std::string bloque;
-    hormigas.clear();
-    while (std::getline(ss, bloque, ';')) {
-        std::string tipo_hormiga;
-        int hormiga_x, hormiga_y;
-        char orient_char;
-        std::stringstream datos(bloque);
-        datos >> tipo_hormiga >> hormiga_x >> hormiga_y >> orient_char;
-        orientacion dir;
-        switch (orient_char) {
-            case '^': dir = orientacion::N; break;
-            case 'v': dir = orientacion::S; break;
-            case '>': dir = orientacion::E; break;
-            case '<': dir = orientacion::O; break;
-            default:
-                std::cerr << "No mas hormigas" << orient_char << std::endl;
-                continue;
-        }
-
-        // Creamos la hormiga según el tipo
-        if (tipo_hormiga == "DDII") {
-            hormigas.push_back(std::make_unique<ant_DDII>(hormiga_x, hormiga_y, dir));
-        } else if (tipo_hormiga == "DIDI") {
-            hormigas.push_back(std::make_unique<ant_DIDI>(hormiga_x, hormiga_y, dir));
-        } else if (tipo_hormiga == "IDDI") {
-            hormigas.push_back(std::make_unique<ant_IDDI>(hormiga_x, hormiga_y, dir));
-        } else if (tipo_hormiga == "IDID") {
-            hormigas.push_back(std::make_unique<ant_IDID>(hormiga_x, hormiga_y, dir));
-        } else {
-            std::cerr << "Tipo de hormiga desconocido: " << tipo_hormiga << std::endl;
-        }
-    }
-
+    /**/
+    /**--- Leemos las hormigas ---
+    /**input_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    /**std::string linea_hormigas;
+    /**std::getline(input_file, linea_hormigas);
+    /**std::stringstream ss(linea_hormigas);
+   /**
+    /**std::string bloque;
+    /**hormigas.clear();
+    /**while (std::getline(ss, bloque, ';')) {
+    /**    std::string tipo_hormiga;
+    /**    int hormiga_x, hormiga_y;
+    /**    char orient_char;
+    /**    std::stringstream datos(bloque);
+    /**    datos >> tipo_hormiga >> hormiga_x >> hormiga_y >> orient_char;
+    /**    orientacion dir;
+    /**    switch (orient_char) {
+    /**        case '^': dir = orientacion::N; break;
+    /**        case 'v': dir = orientacion::S; break;
+    /**        case '>': dir = orientacion::E; break;
+    /**        case '<': dir = orientacion::O; break;
+    /**        default:
+    /**            std::cerr << "No mas hormigas" << orient_char << std::endl;
+    /**            continue;
+    /**    }
+/**
+    /**    // Creamos la hormiga según el tipo
+    /**    if (tipo_hormiga == "DDII") {
+    /**        hormigas.push_back(std::make_unique<ant_DDII>(hormiga_x, hormiga_y, dir));
+    /**    } else if (tipo_hormiga == "DIDI") {
+    /**        hormigas.push_back(std::make_unique<ant_DIDI>(hormiga_x, hormiga_y, dir));
+    /**    } else if (tipo_hormiga == "IDDI") {
+    /**        hormigas.push_back(std::make_unique<ant_IDDI>(hormiga_x, hormiga_y, dir));
+    /**    } else if (tipo_hormiga == "IDID") {
+    /**        hormigas.push_back(std::make_unique<ant_IDID>(hormiga_x, hormiga_y, dir));
+    /**    } else {
+    /**        std::cerr << "Tipo de hormiga desconocido: " << tipo_hormiga << std::endl;
+    /**    }
+    /**
+     *}
+    **/
+    hormigas.push_back(std::make_unique<ant_Cx>(10, 4, orientacion::N, 10, "IDID"));
+    hormigas.push_back(std::make_unique<ant_Hx>(5, 6, orientacion::E, 20, "DIDI"));
     // --- Leemos las celdas con color inicial distinto de 0 ---
-    int celda_x, celda_y, color;
-    while (input_file >> celda_x >> celda_y >> color) {
-        cinta.set_color(celda_x, celda_y, color);
-    }
-
-    input_file.close();
+    //int celda_x, celda_y, color;
+    //while (input_file >> celda_x >> celda_y >> color) {
+    //    cinta.set_color(celda_x, celda_y, color);
+    //}
+//
+    //input_file.close();
 
     Simulacion_por_fichero(hormigas,cinta);
 }
