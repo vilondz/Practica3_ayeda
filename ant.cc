@@ -1,10 +1,11 @@
 #include "ant.h"
-Ant::Ant(int pos_x, int pos_y, orientacion direccion, int vida)
+Ant::Ant(int pos_x, int pos_y, orientacion direccion, int vida, std::string forma_de_moverse)
 {
   pos_x_ = pos_x;
   pos_y_ = pos_y;
   orientacion_ = direccion;
   vida_ = vida;
+  forma_de_moverse_ = forma_de_moverse;
 }
 
 std::pair<int, int> Ant::get_pos(void) const
@@ -21,7 +22,7 @@ std::pair<int, int> Ant::get_pos(void) const
 std::ostream &operator<<(std::ostream &out, const Ant &hormiga)
 {
 
-  // out << hormiga.get_pos().first << hormiga.get_pos().second << std::endl;
+   //out << hormiga.get_pos().first << hormiga.get_pos().second << std::endl;
   switch (hormiga.orientacion_)
   {
   case orientacion::N:

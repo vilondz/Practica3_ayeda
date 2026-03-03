@@ -4,7 +4,7 @@
 #include "colours.h"
 #include <thread>
 #include <chrono>
-
+#pragma once
 class Simulator{
   private:
     bool paso_a_paso_ = false;

@@ -1,0 +1,3 @@
+/home/fernando_vbx/Documents/ayeda/practicas/Practica3_ayeda/build/CMakeFiles/Practica2.dir
+/home/fernando_vbx/Documents/ayeda/practicas/Practica3_ayeda/build/CMakeFiles/edit_cache.dir
+/home/fernando_vbx/Documents/ayeda/practicas/Practica3_ayeda/build/CMakeFiles/rebuild_cache.dir

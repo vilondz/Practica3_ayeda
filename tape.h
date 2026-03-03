@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#pragma once 
 typedef int celda;
 typedef std::vector<celda> fila_de_celdas ;
 typedef std::vector<fila_de_celdas> Cinta;

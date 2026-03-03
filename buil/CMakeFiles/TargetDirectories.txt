@@ -1,3 +1,0 @@
-/home/vboxuser/Documents/practicas/practica3/Practica3_ayeda/buil/CMakeFiles/Practica2.dir
-/home/vboxuser/Documents/practicas/practica3/Practica3_ayeda/buil/CMakeFiles/edit_cache.dir
-/home/vboxuser/Documents/practicas/practica3/Practica3_ayeda/buil/CMakeFiles/rebuild_cache.dir

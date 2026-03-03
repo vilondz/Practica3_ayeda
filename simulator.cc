@@ -55,6 +55,21 @@ void Simulator::Simulacion_por_fichero(std::vector<std::unique_ptr<Ant>>& hormig
 
             // Llamamos al método virtual que aplica el movimiento de la hormiga
             h->movimiento(color_actual);
+            if(h->get_tipo() == "C"){
+                for(auto& hormiga : hormigas){
+		            if (h.get() == hormiga.get()){
+			          continue;
+		            }
+		            else{
+			            if(h->get_pos() == hormiga->get_pos()){
+				            h->comer(hormiga->get_vida());
+			            }
+		            }
+        	    }
+            }
+            else{
+                h->comer(cinta.get_color(x, y));
+            }
             //std::cout << h->get_pos().first << " " << h->get_pos().second << std::endl;
             //std::cout << h->get_pos().first << " " << h->get_pos().second << std::endl;
         }
@@ -221,6 +236,10 @@ void Simulator::visualizar(
             }
         }
         std::cout << '\n';
+    }
+    for(auto& h : hormigas){
+        std::cout << h->get_tipo() << "-" << h->get_forma_de_moverse() << " :"
+        << " (" << h->get_pos().first << ", " << h->get_pos().second << ") " <<  h->get_vida() << std::endl;
     }
 }
 

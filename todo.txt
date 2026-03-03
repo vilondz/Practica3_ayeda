@@ -1,7 +1,3 @@
-añadir las funcionalidades de carnivoros y hervivoros 
-que los carnivoros revisen cuando se mueven si hay alguna hormiga en esa celda y hacer lo suyo
-hervivoros solo sumarles a su vida el numero del color de la cinta
-///////////////
 hacer las diferentes tipo de tapes 
 usando exepciones para el slyding vector
 /////////////7
