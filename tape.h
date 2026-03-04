@@ -1,5 +1,7 @@
 #include <string>
 #include <vector>
+#include <memory>
+#include "ant.h"
 #pragma once 
 typedef int celda;
 typedef std::vector<celda> fila_de_celdas ;
@@ -22,5 +24,6 @@ class Tape {
     void set_color(int x, int y, int color);
     std::string get_color_draw(int color);
     std::string get_color_draw_bg(int color);
+    virtual void check_escpecialidad(std::vector<std::unique_ptr<Ant>>& hormigas) = 0;
     std::ostream& draw_tape(std::ostream& out);
 };

@@ -5,11 +5,13 @@
 #include <sstream>
 #include "ant_Cx.h"
 #include "ant_Hx.h"
+#include "tape_reflective.h"
+#include "tape_periodic.h"
 Simulator::Simulator(std::string& fichero){
  menu(fichero);
 }
 
-void Simulator::Simulacion_por_fichero(std::vector<std::unique_ptr<Ant>>& hormigas, Tape& cinta){
+void Simulator::Simulacion_por_fichero(std::vector<std::unique_ptr<Ant>>& hormigas, std::unique_ptr<Tape>& cinta){
   //std::cout << "dimensiones de la cinta" << std::endl;
   //std::cout << cinta_x << " " << cinta_y << std::endl;
   //std::cout << "posicion de la hormiga" << std::endl;
@@ -27,10 +29,10 @@ void Simulator::Simulacion_por_fichero(std::vector<std::unique_ptr<Ant>>& hormig
 
     while (pasos_a_dar > 0) {
         // Chequeamos si alguna hormiga salió de la cinta
-        if (check_out(cinta, hormigas)) {
-            std::cout << "Al menos una hormiga salió de la cinta. Terminando simulación." << std::endl;
-            break;
-        }
+        //if (check_out(cinta, hormigas)) {
+        //    std::cout << "Al menos una hormiga salió de la cinta. Terminando simulación." << std::endl;
+        //    break;
+        //}
 
         // Visualización
         if (cada_x_pasos_) {
@@ -48,10 +50,10 @@ void Simulator::Simulacion_por_fichero(std::vector<std::unique_ptr<Ant>>& hormig
         // Cada hormiga se mueve según la celda donde está
         for (auto& h : hormigas) {
             auto [x, y] = h->get_pos();
-            int color_actual = cinta.get_color(x, y);
+            int color_actual = cinta->get_color(x, y);
 
             // Cambiamos el color de la celda de manera cíclica
-            cinta.change_color(x, y);
+            cinta->change_color(x, y);
 
             // Llamamos al método virtual que aplica el movimiento de la hormiga
             h->movimiento(color_actual);
@@ -68,13 +70,13 @@ void Simulator::Simulacion_por_fichero(std::vector<std::unique_ptr<Ant>>& hormig
         	    }
             }
             else{
-                h->comer(cinta.get_color(x, y));
+                h->comer(cinta->get_color(x, y));
             }
             //std::cout << h->get_pos().first << " " << h->get_pos().second << std::endl;
             //std::cout << h->get_pos().first << " " << h->get_pos().second << std::endl;
         }
         //cinta.draw_tape(std::cout);
-
+        cinta->check_escpecialidad(hormigas);
         // Chequeamos que no haya hormigas en la misma celda
         //check_hormigas_no_superpuestas(hormigas);
 
@@ -99,7 +101,7 @@ void Simulator::Simulacion_por_fichero(std::vector<std::unique_ptr<Ant>>& hormig
 }
 
     
-void Simulator::Guardar_fichero(Tape & cinta, const std::vector<std::unique_ptr<Ant>>& hormigas){
+void Simulator::Guardar_fichero(std::unique_ptr<Tape>& cinta, const std::vector<std::unique_ptr<Ant>>& hormigas){
   char opcion;
   std::string fichero_guardado = "guardado.langdon";
   do
@@ -193,12 +195,10 @@ void Simulator::menu(std::string& fichero){
 //  std::cout << std::endl;
 //}
 
-void Simulator::visualizar(
-    Tape& cinta, 
-    const std::vector<std::unique_ptr<Ant>>& hormigas)
+void Simulator::visualizar(std::unique_ptr<Tape>& cinta, const std::vector<std::unique_ptr<Ant>>& hormigas)
 {
     // Guardamos dimensiones una sola vez
-    auto dims = cinta.get_dimensions();
+    auto dims = cinta->get_dimensions();
     const int filas = dims.first;
     const int columnas = dims.second;
 
@@ -219,7 +219,7 @@ void Simulator::visualizar(
                 if (hx == i && hy == j) {
                     std::cout 
                         << h->get_color()
-                        << cinta.get_color_draw_bg(cinta.get_color(i, j))
+                        << cinta->get_color_draw_bg(cinta->get_color(i, j))
                         << *h
                         << RESET;
                     dibujado = true;
@@ -229,8 +229,8 @@ void Simulator::visualizar(
 
             if (!dibujado) {
                 std::cout 
-                    << cinta.get_color_draw_bg(cinta.get_color(i, j))
-                    << cinta.get_color_draw(cinta.get_color(i,j))
+                    << cinta->get_color_draw_bg(cinta->get_color(i, j))
+                    << cinta->get_color_draw(cinta->get_color(i,j))
                     << "X"
                     << RESET;
             }
@@ -244,25 +244,25 @@ void Simulator::visualizar(
 }
 
 
-bool Simulator::check_out(Tape& cinta, const std::vector<std::unique_ptr<Ant>>& hormigas) {
+bool Simulator::check_out(std::unique_ptr<Tape>& cinta, const std::vector<std::unique_ptr<Ant>>& hormigas) {
     for (const auto& hormiga : hormigas) {
         auto [x, y] = hormiga->get_pos();
-        if (x < 0 || x >= cinta.get_dimensions().first ||
-            y < 0 || y >= cinta.get_dimensions().second) {
+        if (x < 0 || x >= cinta->get_dimensions().first ||
+            y < 0 || y >= cinta->get_dimensions().second) {
             return true;  // Al menos una hormiga salió de la cinta
         }
     }
     return false;  // Todas dentro de la cinta
 }
 
-void Simulator::crear_archivo_guardado(std::string fichero_guardado, Tape& cinta, const std::vector<std::unique_ptr<Ant>>& hormigas){
+void Simulator::crear_archivo_guardado(std::string fichero_guardado, std::unique_ptr<Tape>& cinta, const std::vector<std::unique_ptr<Ant>>& hormigas){
   std::ofstream output_file(fichero_guardado);
     if (!output_file.is_open()) {
         std::cerr << "Error al abrir el archivo de guardado cerrando programa ..." << std::endl;
         std::exit(1);
     }
     // Guardamos las dimensiones de la cinta
-    output_file << cinta.get_dimensions().first << " " << cinta.get_dimensions().second << std::endl;
+    output_file << cinta->get_dimensions().first << " " << cinta->get_dimensions().second << std::endl;
 
     // Guardamos cada hormiga: posición y orientación
     for (const auto& hormiga : hormigas) {
@@ -271,10 +271,10 @@ void Simulator::crear_archivo_guardado(std::string fichero_guardado, Tape& cinta
                     << hormiga->get_orientacion_char() << std::endl;
     }
     // Guardamos todas las celdas con color distinto de 0
-    for (int i = 0; i < cinta.get_dimensions().first; i++) {
-        for (int j = 0; j < cinta.get_dimensions().second; j++) {
-            if (cinta.get_color(i, j) != 0) { // cualquier color distinto de 0
-                output_file << i << " " << j << " " << cinta.get_color(i, j) << std::endl;
+    for (int i = 0; i < cinta->get_dimensions().first; i++) {
+        for (int j = 0; j < cinta->get_dimensions().second; j++) {
+            if (cinta->get_color(i, j) != 0) { // cualquier color distinto de 0
+                output_file << i << " " << j << " " << cinta->get_color(i, j) << std::endl;
             }
         }
     }
@@ -295,7 +295,8 @@ void Simulator::check_fichero(std::string fichero){
 
     // Inicializamos la cinta vacía
     
-    Tape cinta(20, 40, 4);
+    //std::unique_ptr<Tape> cinta = std::make_unique<TapePeriodic>(10, 10, 4);
+    std::unique_ptr<Tape> cinta = std::make_unique<TapeReflective>(10, 10, 4);
 
     /**/
     /**--- Leemos las hormigas ---
@@ -338,8 +339,8 @@ void Simulator::check_fichero(std::string fichero){
     /**
      *}
     **/
-    hormigas.push_back(std::make_unique<ant_Cx>(10, 4, orientacion::N, 10, "IDID"));
-    hormigas.push_back(std::make_unique<ant_Hx>(5, 6, orientacion::E, 20, "DIDI"));
+    hormigas.push_back(std::make_unique<ant_Cx>(0, 0, orientacion::N, 10, "IDID"));
+    hormigas.push_back(std::make_unique<ant_Hx>(0, 2, orientacion::E, 20, "DIDI"));
     // --- Leemos las celdas con color inicial distinto de 0 ---
     //int celda_x, celda_y, color;
     //while (input_file >> celda_x >> celda_y >> color) {
