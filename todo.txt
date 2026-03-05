@@ -1,5 +1,6 @@
+sliding_vector
 tape_sliding 
-que cojones es un sliding vector
+añadir expeciones en operator[]
 usando exepciones para el slyding vector
 /////////////
 sistema de inputs de hormigas
