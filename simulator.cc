@@ -7,6 +7,7 @@
 #include "ant_Hx.h"
 #include "tape_reflective.h"
 #include "tape_periodic.h"
+#include "tape.h"
 Simulator::Simulator(std::string& fichero){
  menu(fichero);
 }
@@ -72,11 +73,17 @@ void Simulator::Simulacion_por_fichero(std::vector<std::unique_ptr<Ant>>& hormig
             else{
                 h->comer(cinta->get_color(x, y));
             }
+            celda_con_orientacion pos_check = cinta->check_escpecialidad(celda_con_orientacion(std::make_pair(h->get_pos().first, h->get_pos().second),h->get_orientacion()));
+            std::cout << "check" << std::endl;
+            h->set_orientacion(pos_check.second);
+            std::cout << "ponemos orientacion" << std::endl;
+            h->set_pos(pos_check.first.first, pos_check.first.second);
+            std::cout << "seteamos la nueva posicion" << std::endl;
             //std::cout << h->get_pos().first << " " << h->get_pos().second << std::endl;
             //std::cout << h->get_pos().first << " " << h->get_pos().second << std::endl;
         }
         //cinta.draw_tape(std::cout);
-        cinta->check_escpecialidad(hormigas);
+        
         // Chequeamos que no haya hormigas en la misma celda
         //check_hormigas_no_superpuestas(hormigas);
 
@@ -294,8 +301,8 @@ void Simulator::check_fichero(std::string fichero){
 
     // Inicializamos la cinta vacía
     
-    //std::unique_ptr<Tape> cinta = std::make_unique<TapePeriodic>(10, 10, 4);
-    std::unique_ptr<Tape> cinta = std::make_unique<TapeReflective>(10, 10, 4);
+    std::unique_ptr<Tape> cinta = std::make_unique<TapePeriodic>(10, 10, 4);
+    //std::unique_ptr<Tape> cinta = std::make_unique<TapeReflective>(10, 10, 4);
 
     /**/
     /**--- Leemos las hormigas ---

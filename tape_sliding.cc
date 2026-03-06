@@ -17,9 +17,11 @@ TapeSliding::TapeSliding(int size_x, int size_y, int n_colores){
   }
 }
 
-void TapeSliding::check_escpecialidad(std::vector<std::unique_ptr<Ant>>& hormigas){
-
-}
+//void TapeSliding::check_escpecialidad(std::vector<std::unique_ptr<Ant>>& hormigas){
+//  for(auto& h : hormigas){
+//    if()
+//  }
+//}
 
 std::pair<int, int> TapeSliding::get_dimensiones_de_inicio_de_cinta(){
   return sv_t_.get_indices();

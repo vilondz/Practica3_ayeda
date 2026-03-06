@@ -6,10 +6,13 @@
 
 class TapePeriodic : public Tape {
   private:
-
+    Cinta cinta_;
   public:
-  TapePeriodic(int x, int y, int n_colores) : Tape(x, y, n_colores){}
+  TapePeriodic(int x, int y, int n_colores);
   ~TapePeriodic(){}
-  void check_escpecialidad(std::vector<std::unique_ptr<Ant>>& hormigas);
+  int get_color(int, int);
+  void change_color(int, int);
+  void set_color(int, int, int);
+  celda_con_orientacion check_escpecialidad(celda_con_orientacion celda);
   std::pair<int, int> get_dimensiones_de_inicio_de_cinta(void){return std::make_pair(0,0);}
 };
