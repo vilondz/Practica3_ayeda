@@ -18,25 +18,28 @@ TapeSliding::TapeSliding(int size_x, int size_y, int n_colores){
 }
 
 void TapeSliding::check_escpecialidad(std::vector<std::unique_ptr<Ant>>& hormigas){
-  
+
 }
 
 std::pair<int, int> TapeSliding::get_dimensiones_de_inicio_de_cinta(){
-  return get_dimensions();
+  return sv_t_.get_indices();
 }
 
 void TapeSliding::push_columna(){
   for(int i = get_dimensiones_de_inicio_de_cinta().first; i < get_dimensions().first; i++){
     sv_t_[i].push_back(0);
+    set_dimensions(get_dimensions().first, get_dimensions().second + 1);
   }
 }
 
 void TapeSliding::push_fila(){
   sv_t_.push_back(sv(get_dimensiones_de_inicio_de_cinta().second, get_dimensions().second, 0));
+  set_dimensions(get_dimensions().first + 1, get_dimensions().second);
 }
 
 void TapeSliding::insert_fila(){
   sv_t_.insert(sv(get_dimensiones_de_inicio_de_cinta().second, get_dimensions().second, 0));
+  
 }
 
 void TapeSliding::insert_columna(){
