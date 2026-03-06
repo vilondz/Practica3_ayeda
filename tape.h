@@ -18,12 +18,15 @@ class Tape {
     Tape(int = 10, int = 10);
     Tape(int , int , int);
     std::pair<int, int> get_dimensions();
+    void set_dimensions(int x, int y){size_x_ = x; size_y_ = y;}
     int get_color(int x, int y);
     int get_n_colores(void){return n_colores_;}
+    void set_n_colores(int n_colores){n_colores_ = n_colores;}
     void change_color(int x, int y);
     void set_color(int x, int y, int color);
     std::string get_color_draw(int color);
     std::string get_color_draw_bg(int color);
     virtual void check_escpecialidad(std::vector<std::unique_ptr<Ant>>& hormigas) = 0;
+    virtual std::pair<int,int> get_dimensiones_de_inicio_de_cinta() = 0;
     std::ostream& draw_tape(std::ostream& out);
 };

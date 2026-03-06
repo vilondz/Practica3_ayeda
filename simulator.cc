@@ -197,25 +197,24 @@ void Simulator::menu(std::string& fichero){
 
 void Simulator::visualizar(std::unique_ptr<Tape>& cinta, const std::vector<std::unique_ptr<Ant>>& hormigas)
 {
-    // Guardamos dimensiones una sola vez
+   
     auto dims = cinta->get_dimensions();
     const int filas = dims.first;
     const int columnas = dims.second;
 
-    for (int i = 0; i < filas; ++i) {
-        for (int j = 0; j < columnas; ++j) {
+    for (int i = cinta->get_dimensiones_de_inicio_de_cinta().first; i < filas; ++i) {
+        for (int j = cinta->get_dimensiones_de_inicio_de_cinta().second; j < columnas; ++j) {
 
             bool dibujado = false;
 
             for (const auto& h : hormigas) {
 
-                if (!h) continue;  // 👈 Evita desreferenciar nullptr
+                if (!h) continue;  
 
                 auto pos = h->get_pos();
                 int hx = pos.first;
                 int hy = pos.second;
 
-                // Validación extra de seguridad
                 if (hx == i && hy == j) {
                     std::cout 
                         << h->get_color()
