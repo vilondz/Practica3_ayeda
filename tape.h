@@ -1,7 +1,10 @@
 #include <string>
+#include <stdexcept>
 #include <vector>
 #include <memory>
 #include "ant.h"
+#include "exepcion_de_rango.h"
+
 #pragma once 
 typedef int celda;
 typedef std::vector<celda> fila_de_celdas ;
@@ -25,5 +28,5 @@ class Tape {
     std::string get_color_draw_bg(int color);
     virtual celda_con_orientacion check_escpecialidad(celda_con_orientacion celda) = 0;
     virtual std::pair<int,int> get_dimensiones_de_inicio_de_cinta() = 0;
-    std::ostream& draw_tape(std::ostream& out);
+    virtual std::ostream& draw_tape(std::ostream& out) = 0;
 };

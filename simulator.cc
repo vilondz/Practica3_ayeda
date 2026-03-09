@@ -7,7 +7,9 @@
 #include "ant_Hx.h"
 #include "tape_reflective.h"
 #include "tape_periodic.h"
+#include "tape_sliding.h"
 #include "tape.h"
+
 Simulator::Simulator(std::string& fichero){
  menu(fichero);
 }
@@ -73,12 +75,12 @@ void Simulator::Simulacion_por_fichero(std::vector<std::unique_ptr<Ant>>& hormig
             else{
                 h->comer(cinta->get_color(x, y));
             }
+            //intentar acceder a la posicion de la hormiga si esta fuera del rango hay que llamar a 
+            //check especialidad
+            
             celda_con_orientacion pos_check = cinta->check_escpecialidad(celda_con_orientacion(std::make_pair(h->get_pos().first, h->get_pos().second),h->get_orientacion()));
-            std::cout << "check" << std::endl;
             h->set_orientacion(pos_check.second);
-            std::cout << "ponemos orientacion" << std::endl;
             h->set_pos(pos_check.first.first, pos_check.first.second);
-            std::cout << "seteamos la nueva posicion" << std::endl;
             //std::cout << h->get_pos().first << " " << h->get_pos().second << std::endl;
             //std::cout << h->get_pos().first << " " << h->get_pos().second << std::endl;
         }
@@ -247,6 +249,7 @@ void Simulator::visualizar(std::unique_ptr<Tape>& cinta, const std::vector<std::
         std::cout << h->get_tipo() << "-" << h->get_forma_de_moverse() << " :"
         << " (" << h->get_pos().first << ", " << h->get_pos().second << ") " <<  h->get_vida() << std::endl;
     }
+    cinta->draw_tape(std::cout);
 }
 
 
@@ -301,9 +304,9 @@ void Simulator::check_fichero(std::string fichero){
 
     // Inicializamos la cinta vacía
     
-    std::unique_ptr<Tape> cinta = std::make_unique<TapePeriodic>(10, 10, 4);
+    //std::unique_ptr<Tape> cinta = std::make_unique<TapePeriodic>(10, 10, 4);
     //std::unique_ptr<Tape> cinta = std::make_unique<TapeReflective>(10, 10, 4);
-
+    std::unique_ptr<Tape> cinta = std::make_unique<TapeSliding>(10, 10, 4);
     /**/
     /**--- Leemos las hormigas ---
     /**input_file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -345,7 +348,7 @@ void Simulator::check_fichero(std::string fichero){
     /**
      *}
     **/
-    hormigas.push_back(std::make_unique<ant_Cx>(0, 0, orientacion::N, 10, "IDID"));
+    //hormigas.push_back(std::make_unique<ant_Cx>(0, 0, orientacion::N, 10, "IDID"));
     hormigas.push_back(std::make_unique<ant_Hx>(0, 2, orientacion::E, 20, "DIDI"));
     // --- Leemos las celdas con color inicial distinto de 0 ---
     //int celda_x, celda_y, color;

@@ -11,7 +11,8 @@ class SlidingVector {
 	SlidingVector(int x, int y, T dato);
 	SlidingVector(int x, int y);
 	~SlidingVector(){}
-	std::pair<int,int> get_indices(void){return std::make_pair(principio_, final_)}
+	std::pair<int,int> get_indices(void){return std::make_pair(principio_, final_);}
+	void set_indices(int x, int y){principio_ = x; final_ = y;}
 	void resize(int size);
 	int size();
 	T& operator[](int x);
@@ -43,6 +44,14 @@ int SlidingVector<T>::size(){return v_.size();}
 //añadir incidencia con try catch
 template <class T>
 T& SlidingVector<T>::operator[](int x){
+	//if(x < principio_ || x > final_){
+  //      throw SlidingVectorException(
+  //          typeid(T).name(),
+  //          x,
+  //          principio_,
+  //          final_
+  //      );
+  //  }
 	return v_[x - principio_];
 }
 
@@ -61,4 +70,6 @@ void SlidingVector<T>::insert(T dato){
 template <class T>
 void SlidingVector<T>::resize(int size){
 	v_.resize(size);
+	final_ = principio_ + size;
 }
+
